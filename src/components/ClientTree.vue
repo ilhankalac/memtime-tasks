@@ -59,7 +59,11 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
       class="loading-bar"
     />
 
-    <div v-for="client in clients" :key="client.id" class="tree-item">
+    <div
+      v-for="client in clients"
+      :key="client.id"
+      class="tree-item"
+    >
       <!-- Client -->
       <div
         class="tree-item-content clickable"
@@ -73,7 +77,10 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
       </div>
 
       <!-- Client Details -->
-      <div v-if="isClientExpanded(client.id)" class="tree-item-children">
+      <div
+        v-if="isClientExpanded(client.id)"
+        class="tree-item-children"
+      >
         <div class="tree-item-content data-item level-1">
           <span class="tree-item-toggle-placeholder" />
           <span class="tree-item-title">
@@ -84,7 +91,9 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
           <span class="tree-item-toggle-placeholder" />
           <span class="tree-item-title">
             <strong>Status:</strong>
-            <span :class="`status-badge status-${client.status}`">{{ client.status }}</span>
+            <span :class="`status-badge status-${client.status}`">
+              {{ client.status }}
+            </span>
           </span>
         </div>
         <div class="tree-item-content data-item level-1">
@@ -105,7 +114,11 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
         />
 
         <!-- Projects -->
-        <div v-for="project in client.projects" :key="project.id" class="tree-item">
+        <div
+          v-for="project in client.projects"
+          :key="project.id"
+          class="tree-item"
+        >
           <div
             class="tree-item-content clickable level-1"
             @click="toggleProject(project.id)"
@@ -118,12 +131,17 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
           </div>
 
           <!-- Project Details -->
-          <div v-if="isProjectExpanded(project.id)" class="tree-item-children">
+          <div
+            v-if="isProjectExpanded(project.id)"
+            class="tree-item-children"
+          >
             <div class="tree-item-content data-item level-2">
               <span class="tree-item-toggle-placeholder" />
               <span class="tree-item-title">
                 <strong>Status:</strong> 
-                <span :class="`status-badge status-${project.status}`">{{ project.status }}</span>
+                <span :class="`status-badge status-${project.status}`">
+                  {{ project.status }}
+                </span>
               </span>
             </div>
             <div class="tree-item-content data-item level-2">
@@ -148,30 +166,47 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
             />
 
             <!-- Tasks -->
-            <div v-for="task in project.tasks" :key="task.id" class="tree-item">
+            <div
+              v-for="task in project.tasks"
+              :key="task.id"
+              class="tree-item"
+            >
               <div class="tree-item-content clickable level-2">
                 <span class="tree-item-toggle-placeholder" />
                 <span class="tree-item-icon">✓</span>
-                <span class="tree-item-title">{{ task.name }}</span>
+                <span
+                  class="tree-item-title"
+                  style="text-decoration: underline;"
+                >
+                  {{ task.name }}
+                </span>
               </div>
               <div class="tree-item-children">
                 <div class="tree-item-content data-item level-3">
                   <span class="tree-item-toggle-placeholder" />
-                  <span class="tree-item-title pl-16">
+                  <span class="tree-item-title pl-7">
                     <strong>Status:</strong> 
-                    <span :class="`status-badge status-${task.status}`">{{ task.status }}</span>
+                    <span :class="`status-badge status-${task.status}`">
+                      {{ task.status }}
+                    </span>
                   </span>
                 </div>
                 <div class="tree-item-content data-item level-3">
                   <span class="tree-item-toggle-placeholder" />
-                  <span class="tree-item-title pl-16"><strong>Created:</strong> {{ formatDate(task.createdAt) }}</span>
+                  <span class="tree-item-title pl-7"><strong>Created:</strong> {{ formatDate(task.createdAt) }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Load More Tasks Button -->
-            <div v-if="hasMoreTasks?.[project.id]" class="load-more-container level-2">
-              <button class="load-more-button small" @click="emit('loadMoreTasks', project.id)">
+            <div
+              v-if="hasMoreTasks?.[project.id]"
+              class="load-more-container level-2"
+            >
+              <button
+                class="load-more-button small"
+                @click="emit('loadMoreTasks', project.id)"
+              >
                 Load More Tasks
               </button>
             </div>
@@ -179,8 +214,14 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
         </div>
 
         <!-- Load More Projects Button -->
-        <div v-if="hasMoreProjects?.[client.id]" class="load-more-container level-1">
-          <button class="load-more-button small" @click="emit('loadMoreProjects', client.id)">
+        <div
+          v-if="hasMoreProjects?.[client.id]"
+          class="load-more-container level-1"
+        >
+          <button
+            class="load-more-button small"
+            @click="emit('loadMoreProjects', client.id)"
+          >
             Load More Projects
           </button>
         </div>
@@ -188,8 +229,14 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
     </div>
 
     <!-- Load More Clients Button -->
-    <div v-if="hasMoreClients" class="load-more-container">
-      <button class="load-more-button" @click="emit('loadMoreClients')">
+    <div
+      v-if="hasMoreClients"
+      class="load-more-container"
+    >
+      <button
+        class="load-more-button"
+        @click="emit('loadMoreClients')"
+      >
         Load More Clients
       </button>
     </div>
