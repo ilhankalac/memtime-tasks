@@ -22,13 +22,28 @@ const selectedEntry = ref<TimeEntry | null>(null)
 const snackbar = ref(false)
 const snackbarMessage = ref('')
 const snackbarColor = ref('success')
+const loading = ref(false)
 
 onMounted(() => {
-  fetchTimeEntries()
+  loadData()
 })
 
+const loadData = async () => {
+  loading.value = true
+  try {
+    await fetchTimeEntries()
+  } finally {
+    loading.value = false
+  }
+}
+
 const handleLoadMore = async () => {
-  await fetchTimeEntries()
+  loading.value = true
+  try {
+    await fetchTimeEntries()
+  } finally {
+    loading.value = false
+  }
 }
 
 function openCreateDialog() {
@@ -95,7 +110,7 @@ function showSnackbar(message: string, color: string) {
         </v-btn>
       </v-card-title>
 
-      <v-data-table :headers="headers" :items="timeEntries" density="compact">
+      <v-data-table :headers="headers" :items="timeEntries" :loading="loading" density="compact">
         <template #item.start="{ item }">
           {{ formatDate(item.start) }}
         </template>
