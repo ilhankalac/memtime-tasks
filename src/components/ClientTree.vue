@@ -4,6 +4,9 @@ import type { Client } from '@/types/entities'
 
 interface Props {
   clients: Client[]
+  hasMoreClients?: boolean
+  hasMoreProjects?: Record<number, boolean>
+  hasMoreTasks?: Record<number, boolean>
 }
 
 const props = defineProps<Props>()
@@ -11,6 +14,9 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
   clientClick: [clientId: number]
   projectClick: [projectId: number]
+  loadMoreClients: []
+  loadMoreProjects: [clientId: number]
+  loadMoreTasks: [projectId: number]
 }>()
 
 const expandedClients = ref<Set<number>>(new Set())
@@ -57,11 +63,16 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
       <div v-if="isClientExpanded(client.id)" class="tree-item-children">
         <div class="tree-item-content data-item level-1">
           <span class="tree-item-toggle-placeholder" />
-          <span class="tree-item-title"><strong>Description:</strong> {{ client.description }}</span>
+          <span class="tree-item-title">
+            <strong>Description:</strong> {{ client.description }}
+          </span>
         </div>
         <div class="tree-item-content data-item level-1">
           <span class="tree-item-toggle-placeholder" />
-          <span class="tree-item-title"><strong>Status:</strong> <span :class="`status-badge status-${client.status}`">{{ client.status }}</span></span>
+          <span class="tree-item-title">
+            <strong>Status:</strong>
+            <span :class="`status-badge status-${client.status}`">{{ client.status }}</span>
+          </span>
         </div>
         <div class="tree-item-content data-item level-1">
           <span class="tree-item-toggle-placeholder" />
@@ -89,15 +100,22 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
           <div v-if="isProjectExpanded(project.id)" class="tree-item-children">
             <div class="tree-item-content data-item level-2">
               <span class="tree-item-toggle-placeholder" />
-              <span class="tree-item-title"><strong>Status:</strong> <span :class="`status-badge status-${project.status}`">{{ project.status }}</span></span>
+              <span class="tree-item-title">
+                <strong>Status:</strong> 
+                <span :class="`status-badge status-${project.status}`">{{ project.status }}</span>
+              </span>
             </div>
             <div class="tree-item-content data-item level-2">
               <span class="tree-item-toggle-placeholder" />
-              <span class="tree-item-title"><strong>Created:</strong> {{ project.createdAt }}</span>
+              <span class="tree-item-title">
+                <strong>Created:</strong> {{ project.createdAt }}
+              </span>
             </div>
             <div class="tree-item-content data-item level-2">
               <span class="tree-item-toggle-placeholder" />
-              <span class="tree-item-title"><strong>Updated:</strong> {{ project.updatedAt }}</span>
+              <span class="tree-item-title">
+                <strong>Updated:</strong> {{ project.updatedAt }}
+              </span>
             </div>
 
             <!-- Tasks -->
@@ -110,7 +128,10 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
               <div class="tree-item-children">
                 <div class="tree-item-content data-item level-3">
                   <span class="tree-item-toggle-placeholder" />
-                  <span class="tree-item-title pl-16"><strong>Status:</strong> <span :class="`status-badge status-${task.status}`">{{ task.status }}</span></span>
+                  <span class="tree-item-title pl-16">
+                    <strong>Status:</strong> 
+                    <span :class="`status-badge status-${task.status}`">{{ task.status }}</span>
+                  </span>
                 </div>
                 <div class="tree-item-content data-item level-3">
                   <span class="tree-item-toggle-placeholder" />
@@ -118,16 +139,36 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
                 </div>
               </div>
             </div>
+
+            <!-- Load More Tasks Button -->
+            <div v-if="hasMoreTasks?.[project.id]" class="load-more-container level-2">
+              <button class="load-more-button small" @click="emit('loadMoreTasks', project.id)">
+                Load More Tasks
+              </button>
+            </div>
           </div>
         </div>
+
+        <!-- Load More Projects Button -->
+        <div v-if="hasMoreProjects?.[client.id]" class="load-more-container level-1">
+          <button class="load-more-button small" @click="emit('loadMoreProjects', client.id)">
+            Load More Projects
+          </button>
+        </div>
       </div>
+    </div>
+
+    <!-- Load More Clients Button -->
+    <div v-if="hasMoreClients" class="load-more-container">
+      <button class="load-more-button" @click="emit('loadMoreClients')">
+        Load More Clients
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped>
 .client-tree {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
   user-select: none;
   background: #ffffff;
@@ -245,5 +286,39 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
 .status-completed {
   background-color: #e8f5e9;
   color: #388e3c;
+}
+
+.load-more-container {
+  margin: 12px 0;
+  padding: 8px 12px;
+}
+
+.load-more-button {
+  width: 100%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.load-more-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.load-more-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+.load-more-button.small {
+  padding: 8px 14px;
+  font-size: 13px;
 }
 </style>

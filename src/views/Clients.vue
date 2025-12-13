@@ -3,7 +3,15 @@ import { useClients } from '@/composables/useClients'
 import { onMounted } from 'vue'
 import ClientTree from '@/components/ClientTree.vue'
 
-const { clients, fetchClients, fetchProjects, fetchTasks } = useClients()
+const {
+  clients,
+  fetchClients,
+  fetchProjects,
+  fetchTasks,
+  hasMoreClients,
+  hasMoreProjects,
+  hasMoreTasks
+} = useClients()
 
 onMounted(() => {
   fetchClients()
@@ -16,12 +24,34 @@ const handleClientClick = async (clientId: number) => {
 const handleProjectClick = async (projectId: number) => {
   await fetchTasks(projectId)
 }
+
+const handleLoadMoreClients = async () => {
+  await fetchClients()
+}
+
+const handleLoadMoreProjects = async (clientId: number) => {
+  await fetchProjects(clientId)
+}
+
+const handleLoadMoreTasks = async (projectId: number) => {
+  await fetchTasks(projectId)
+}
 </script>
 
 <template>
   <div>
     <div class="text-h5 font-weight-light">Task 1</div>
-    <ClientTree :clients="clients" @client-click="handleClientClick" @project-click="handleProjectClick" />
+    <ClientTree
+      :clients="clients"
+      :has-more-clients="hasMoreClients"
+      :has-more-projects="hasMoreProjects"
+      :has-more-tasks="hasMoreTasks"
+      @client-click="handleClientClick"
+      @project-click="handleProjectClick"
+      @load-more-clients="handleLoadMoreClients"
+      @load-more-projects="handleLoadMoreProjects"
+      @load-more-tasks="handleLoadMoreTasks"
+    />
   </div>
 </template>
 <style>
