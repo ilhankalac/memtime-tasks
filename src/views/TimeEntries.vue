@@ -21,10 +21,10 @@ const headers = [
 
 const dialogOpen = ref(false)
 const selectedEntry = ref<TimeEntry | null>(null)
+const loading = ref(false)
 const snackbar = ref(false)
 const snackbarMessage = ref('')
-const snackbarColor = ref('success')
-const loading = ref(false)
+const snackbarColor = ref('info')
 
 onMounted(() => {
   loadData()
@@ -34,6 +34,7 @@ const loadData = async () => {
   loading.value = true
   try {
     await fetchTimeEntries()
+  } catch (error) {
   } finally {
     loading.value = false
   }
@@ -43,6 +44,7 @@ const handleLoadMore = async () => {
   loading.value = true
   try {
     await fetchTimeEntries()
+  } catch (error) {
   } finally {
     loading.value = false
   }
@@ -62,20 +64,11 @@ async function handleFormSubmit(formData: TimeEntryFormData, id?: number) {
   try {
     if (id) {
       await updateTimeEntry(id, formData)
-      showSnackbar(`Time entry #${id} updated successfully!`, 'success')
     } else {
-      const newEntry = await createTimeEntry(formData)
-      showSnackbar(`Time entry #${newEntry.id} created successfully!`, 'success')
+      await createTimeEntry(formData)
     }
-  } catch (error: any) {
-    const status = error?.response?.status
-    if (status === 404) {
-      showSnackbar('Time entry not found.', 'error')
-    } else if (status === 400) {
-      showSnackbar('Invalid input. Please check your data.', 'error')
-    } else {
-      showSnackbar('Failed to save time entry.', 'error')
-    }
+    dialogOpen.value = false
+  } catch (error) {
   }
 }
 
@@ -83,22 +76,9 @@ async function handleDelete(entry: TimeEntry) {
   if (confirm(`Are you sure you want to delete time entry #${entry.id}?`)) {
     try {
       await deleteTimeEntry(entry.id)
-      showSnackbar(`Time entry #${entry.id} deleted successfully!`, 'success')
-    } catch (error: any) {
-      const status = error?.response?.status
-      if (status === 404) {
-        showSnackbar('Time entry not found.', 'error')
-      } else {
-        showSnackbar('Failed to delete time entry.', 'error')
-      }
+    } catch (error) {
     }
   }
-}
-
-function showSnackbar(message: string, color: string) {
-  snackbarMessage.value = message
-  snackbarColor.value = color
-  snackbar.value = true
 }
 </script>
 
