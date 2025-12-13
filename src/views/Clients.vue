@@ -1,31 +1,23 @@
 <script setup lang="ts">
 import { useClients } from '@/composables/useClients'
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import ClientTree from '@/components/ClientTree.vue'
 
-const { clients, fetchClients } = useClients()
+const { clients, fetchClients, fetchProjects } = useClients()
 
 onMounted(() => {
   fetchClients()
 })
 
-const treeItems = computed(() => 
-  clients.map(client => ({
-    id: client.id,
-    title: client.name,
-    children: [
-      { id: `${client.id}-desc`, title: `Description: ${client.description}` },
-      { id: `${client.id}-status`, title: `Status: ${client.status}` },
-      { id: `${client.id}-created`, title: `Created: ${client.createdAt}` },
-      { id: `${client.id}-updated`, title: `Updated: ${client.updatedAt}` },
-    ]
-  }))
-)
+const handleClientClick = async (clientId: number) => {
+  await fetchProjects(clientId)
+}
 </script>
 
 <template>
   <div>
-    <h1>Clients</h1>
-    <v-treeview :items="treeItems" item-value="id"></v-treeview>
+    <div class="text-h5 font-weight-light">Clients</div>
+    <ClientTree :clients="clients" @client-click="handleClientClick" />
   </div>
 </template>
 <style>
