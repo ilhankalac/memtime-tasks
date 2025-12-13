@@ -1,42 +1,50 @@
-# memtime-task
+# Time Entry Management Application
 
-This template should help get you started developing with Vue 3 in Vite.
+A Vue 3 application for managing time entries with hierarchical client, project, and task organization.
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+**1. Hierarchical Tree View**
+- Displays clients, projects, and tasks in a nested tree structure
+- Lazy-loads data on expansion with pagination support
+- Uses `GET /clients`, `GET /clients/:id/projects`, `GET /projects/:id/tasks`
 
-## Recommended Browser Setup
+**2. Time Entries List**
+- Displays time entries in a table (ID, Task ID, Comment, Start, End, Created At)
+- Pagination support
+- Uses `GET /time-entries`
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+**3. Create and Update Time Entries**
+- Form for creating and updating time entries
+- Required fields: taskId, comment, start (ISO 8601), end (ISO 8601)
+- Uses `POST /time-entries` and `PUT /time-entries/:id`
 
-## Type Support for `.vue` Imports in TS
+## Technology Stack
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- Vue 3 (Composition API)
+- TypeScript (for better static typing and type safety)
+- Vite
+- Vuetify
+- Axios
 
-## Customize configuration
+## Setup
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+The application will be available at `http://localhost:5173`
 
-```sh
-npm run build
-```
+## Environment Variables
+
+Environment variables are stored in a `.env` file and not included in the codebase.
+
+Required variable:
+- `VITE_API_KEY` - API authentication token
+
+## Error Handling
+
+- Displays error messages for API failures
+- Form validation with inline errors
+- Handles 404 and 400 errors appropriately
