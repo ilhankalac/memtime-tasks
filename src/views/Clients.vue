@@ -40,7 +40,6 @@ const handleLoadMoreTasks = async (projectId: number) => {
 
 <template>
   <div>
-    <div class="text-h5 font-weight-light">Task 1</div>
     <ClientTree
       :clients="clients"
       :has-more-clients="hasMoreClients"
