@@ -73,12 +73,12 @@ const snackbarColor = computed(() => {
             :color="route.path === '/clients' ? 'primary' : 'default'"
             :size="smAndDown ? 'small' : undefined"
             @click="router.push('/clients')"
-            class="nav-btn"
+            :class="['nav-btn', { 'nav-btn-small': smAndDown }]"
           >
             <v-icon start>mdi-folder-multiple</v-icon>
             <div class="btn-content">
               <span class="btn-label">Task 1 - Client Tree</span>
-              <span class="btn-description">Hierarchical display of Clients → Projects → Tasks</span>
+              <span class="btn-description" v-if="!smAndDown">Hierarchical display of Clients → Projects → Tasks</span>
             </div>
           </v-btn>
           <v-btn
@@ -86,12 +86,12 @@ const snackbarColor = computed(() => {
             :color="route.path === '/time-entries' ? 'primary' : 'default'"
             :size="smAndDown ? 'small' : undefined"
             @click="router.push('/time-entries')"
-            class="nav-btn"
+            :class="['nav-btn', { 'nav-btn-small': smAndDown }]"
           >
             <v-icon start>mdi-clock-outline</v-icon>
             <div class="btn-content">
               <span class="btn-label">Tasks 2 & 3 - Time Entries</span>
-              <span class="btn-description">List, create, and update time entries</span>
+              <span class="btn-description" v-if="!smAndDown">List, create, and update time entries</span>
             </div>
           </v-btn>
         </div>
@@ -182,11 +182,20 @@ const snackbarColor = computed(() => {
   display: flex;
   gap: 12px;
   padding: 8px 0;
+  flex-wrap: wrap;
 }
 
 .nav-btn {
   height: auto !important;
   padding: 16px 20px !important;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-btn-small {
+  padding: 12px 16px !important;
+  flex: none;
+  width: 100%;
 }
 
 .btn-content {
@@ -195,11 +204,16 @@ const snackbarColor = computed(() => {
   align-items: flex-start;
   gap: 4px;
   text-align: left;
+  width: 100%;
 }
 
 .btn-label {
   font-size: 14px;
   font-weight: 600;
+}
+
+.nav-btn-small .btn-label {
+  font-size: 13px;
 }
 
 .btn-description {
