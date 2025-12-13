@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Client } from '@/types/entities'
+import { formatDate } from '@/utils/dateFormat'
 
 interface Props {
   clients: Client[]
@@ -76,11 +77,11 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
         </div>
         <div class="tree-item-content data-item level-1">
           <span class="tree-item-toggle-placeholder" />
-          <span class="tree-item-title"><strong>Created:</strong> {{ client.createdAt }}</span>
+          <span class="tree-item-title"><strong>Created:</strong> {{ formatDate(client.createdAt) }}</span>
         </div>
         <div class="tree-item-content data-item level-1">
           <span class="tree-item-toggle-placeholder" />
-          <span class="tree-item-title"><strong>Updated:</strong> {{ client.updatedAt }}</span>
+          <span class="tree-item-title"><strong>Updated:</strong> {{ formatDate(client.updatedAt) }}</span>
         </div>
 
         <!-- Projects -->
@@ -108,13 +109,13 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
             <div class="tree-item-content data-item level-2">
               <span class="tree-item-toggle-placeholder" />
               <span class="tree-item-title">
-                <strong>Created:</strong> {{ project.createdAt }}
+                <strong>Created:</strong> {{ formatDate(project.createdAt) }}
               </span>
             </div>
             <div class="tree-item-content data-item level-2">
               <span class="tree-item-toggle-placeholder" />
               <span class="tree-item-title">
-                <strong>Updated:</strong> {{ project.updatedAt }}
+                <strong>Updated:</strong> {{ formatDate(project.updatedAt) }}
               </span>
             </div>
 
@@ -135,7 +136,7 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
                 </div>
                 <div class="tree-item-content data-item level-3">
                   <span class="tree-item-toggle-placeholder" />
-                  <span class="tree-item-title pl-16"><strong>Created:</strong> {{ task.createdAt }}</span>
+                  <span class="tree-item-title pl-16"><strong>Created:</strong> {{ formatDate(task.createdAt) }}</span>
                 </div>
               </div>
             </div>

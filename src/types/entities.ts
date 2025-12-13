@@ -21,3 +21,13 @@ export interface Project extends BaseEntity {
 export interface Task extends BaseEntity {
   projectId: number;
 }
+
+export interface TimeEntry {
+  id: number;
+  taskId: number;
+  comment: string;
+  start: string;
+  end: string;
+  createdAt: string;
+  updatedAt: string;
+}
