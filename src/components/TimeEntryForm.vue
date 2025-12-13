@@ -64,11 +64,29 @@ function toISOString(localDateTimeString: string): string {
   if (!localDateTimeString) {
     throw new Error('Date time string is required')
   }
-  const date = new Date(localDateTimeString)
+  // Parse the local datetime string directly to avoid timezone issues
+  const [datePart, timePart] = localDateTimeString.split('T')
+  if (!datePart || !timePart) {
+    throw new Error('Invalid date time format')
+  }
+  
+  const [year, month, day] = datePart.split('-')
+  const [hours, minutes] = timePart.split(':')
+  
+  if (!year || !month || !day || !hours || !minutes) {
+    throw new Error('Invalid date time format')
+  }
+  
+  // Create ISO 8601 string with UTC timezone (Z)
+  const isoString = `${year}-${month}-${day}T${hours}:${minutes}:00.000Z`
+  
+  // Validate by parsing
+  const date = new Date(isoString)
   if (isNaN(date.getTime())) {
     throw new Error('Invalid date time')
   }
-  return date.toISOString()
+  
+  return isoString
 }
 
 function resetForm() {
