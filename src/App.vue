@@ -43,15 +43,28 @@ const snackbarColor = computed(() => {
         <div class="header-content">
           <div>
             <h1 class="app-title">Time Management System</h1>
-            <p class="app-subtitle">Organize clients, projects, tasks and track your work time efficiently</p>
+            <p class="app-subtitle">Technical implementation for the assignment</p>
+            <p class="task-link">
+              Task specification:
+              <a
+                href="https://lustrous-beijinho-54fcf1.netlify.app/task.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://lustrous-beijinho-54fcf1.netlify.app/task.html
+              </a>
+            </p>
           </div>
         </div>
       </v-card-item>
-      
+
       <v-divider />
-      
+
       <v-card-item>
-        <div 
+        <div class="implementation-info">
+          <p class="info-text">This application implements all three tasks from the assignment using two main views:</p>
+        </div>
+        <div
           class="nav-buttons"
           :class="smAndDown ? 'flex-column align-start' : ''"
         >
@@ -60,18 +73,26 @@ const snackbarColor = computed(() => {
             :color="route.path === '/clients' ? 'primary' : 'default'"
             :size="smAndDown ? 'small' : undefined"
             @click="router.push('/clients')"
+            class="nav-btn"
           >
             <v-icon start>mdi-folder-multiple</v-icon>
-            Task 1 - Clients
+            <div class="btn-content">
+              <span class="btn-label">Task 1 - Client Tree</span>
+              <span class="btn-description">Hierarchical display of Clients → Projects → Tasks</span>
+            </div>
           </v-btn>
           <v-btn
             :variant="route.path === '/time-entries' ? 'flat' : 'outlined'"
             :color="route.path === '/time-entries' ? 'primary' : 'default'"
             :size="smAndDown ? 'small' : undefined"
             @click="router.push('/time-entries')"
+            class="nav-btn"
           >
             <v-icon start>mdi-clock-outline</v-icon>
-            Task 2 & 3 - Time Entries
+            <div class="btn-content">
+              <span class="btn-label">Tasks 2 & 3 - Time Entries</span>
+              <span class="btn-description">List, create, and update time entries</span>
+            </div>
           </v-btn>
         </div>
       </v-card-item>
@@ -126,13 +147,64 @@ const snackbarColor = computed(() => {
 .app-subtitle {
   font-size: 14px;
   color: #666;
-  margin: 0;
+  margin: 0 0 8px 0;
   max-width: 500px;
+}
+
+.task-link {
+  font-size: 13px;
+  color: #555;
+  margin: 8px 0 0 0;
+}
+
+.task-link a {
+  color: #1976d2;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.task-link a:hover {
+  text-decoration: underline;
+}
+
+.implementation-info {
+  margin-bottom: 16px;
+}
+
+.info-text {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+  font-weight: 500;
 }
 
 .nav-buttons {
   display: flex;
   gap: 12px;
   padding: 8px 0;
+}
+
+.nav-btn {
+  height: auto !important;
+  padding: 16px 20px !important;
+}
+
+.btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+}
+
+.btn-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-description {
+  font-size: 12px;
+  opacity: 0.8;
+  font-weight: 400;
 }
 </style>
