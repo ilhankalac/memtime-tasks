@@ -19,14 +19,7 @@ const route = useRoute()
         :color="route.path === '/time-entries' ? 'primary' : 'default'"
         @click="router.push('/time-entries')"
       >
-        Task 2 - Time Entries
-      </v-btn>
-      <v-btn
-        :variant="route.path === '/time-entry-form' ? 'flat' : 'outlined'"
-        :color="route.path === '/time-entry-form' ? 'primary' : 'default'"
-        @click="router.push('/time-entry-form')"
-      >
-        Task 3 - Time Entry Form
+        Task 2 & 3 - Time Entries
       </v-btn>
     </div>
     <router-view />

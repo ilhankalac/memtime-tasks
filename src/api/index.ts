@@ -27,6 +27,11 @@ class ApiClient {
     return data
   }
 
+  async patch<T>(endpoint: string, payload: any): Promise<T> {
+    const { data } = await client.patch(endpoint, payload)
+    return data
+  }
+
   async delete<T>(endpoint: string): Promise<T> {
     const { data } = await client.delete(endpoint)
     return data

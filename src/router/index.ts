@@ -17,12 +17,6 @@ const router = createRouter({
       name: 'timeEntries',
       component: () => import('../views/TimeEntries.vue'),
     },
-    {
-      path: '/time-entry-form',
-      name: 'timeEntryForm',
-      component: () => import('../views/TimeEntryForm.vue'),
-    },
-
   ],
 })
 
