@@ -220,15 +220,26 @@ function handleCancel() {
         </v-form>
       </v-card-text>
 
-      <v-card-actions>
-        <v-spacer />
-        <v-btn color="grey" variant="text" @click="handleCancel">
+      <div class="d-flex pa-5">
+        <v-btn
+          color="grey"
+          class="flex-grow-1 me-2"
+          variant="outlined"
+          @click="handleCancel"
+        >
           Cancel
         </v-btn>
-        <v-btn color="primary" variant="elevated" @click="handleSubmit">
+
+        <v-btn
+          color="primary"
+          variant="elevated"
+          class="flex-grow-1"
+          @click="handleSubmit"
+        >
           {{ isEditMode ? 'Update' : 'Create' }}
         </v-btn>
-      </v-card-actions>
+      </div>
+
     </v-card>
   </v-dialog>
 </template>
