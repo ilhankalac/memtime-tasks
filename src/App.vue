@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
+import { useDisplay } from 'vuetify'
+const { smAndDown } = useDisplay()
+
 const router = useRouter()
 const route = useRoute()
 </script>
@@ -19,12 +22,15 @@ const route = useRoute()
       <v-divider />
       
       <v-card-item>
-        <div class="nav-buttons">
+        <div 
+          class="nav-buttons"
+          :class="smAndDown ? 'flex-column align-start' : ''"
+        >
           <v-btn
             :variant="route.path === '/clients' ? 'flat' : 'outlined'"
             :color="route.path === '/clients' ? 'primary' : 'default'"
+            :size="smAndDown ? 'small' : undefined"
             @click="router.push('/clients')"
-            size="large"
           >
             <v-icon start>mdi-folder-multiple</v-icon>
             Task 1 - Clients
@@ -32,8 +38,8 @@ const route = useRoute()
           <v-btn
             :variant="route.path === '/time-entries' ? 'flat' : 'outlined'"
             :color="route.path === '/time-entries' ? 'primary' : 'default'"
+            :size="smAndDown ? 'small' : undefined"
             @click="router.push('/time-entries')"
-            size="large"
           >
             <v-icon start>mdi-clock-outline</v-icon>
             Task 2 & 3 - Time Entries

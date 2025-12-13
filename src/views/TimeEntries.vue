@@ -4,6 +4,8 @@ import { formatDate } from '@/utils/dateFormat'
 import { onMounted, ref } from 'vue'
 import TimeEntryForm from '@/components/TimeEntryForm.vue'
 import type { TimeEntry } from '@/types/entities'
+import { useDisplay } from 'vuetify'
+const { smAndDown } = useDisplay()
 
 const { timeEntries, fetchTimeEntries, createTimeEntry, updateTimeEntry, deleteTimeEntry, hasMore } = useTimeEntries()
 
@@ -103,10 +105,18 @@ function showSnackbar(message: string, color: string) {
 <template>
   <div>
     <v-card>
-      <v-card-title class="d-flex justify-space-between align-center">
+      <v-card-title 
+        class="d-flex justify-space-between align-center"
+        :class="smAndDown? 'flex-column align-start' : ''"
+      >
         <span>Time Entries</span>
-        <v-btn color="primary" @click="openCreateDialog">
-          Create Time Entry
+        <v-btn 
+          color="primary" 
+          variant="outlined"
+          @click="openCreateDialog"
+        >
+          <v-icon start>mdi-plus</v-icon>
+          Add Time Entry
         </v-btn>
       </v-card-title>
 
