@@ -10,6 +10,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   clientClick: [clientId: number]
+  projectClick: [projectId: number]
 }>()
 
 const expandedClients = ref<Set<number>>(new Set())
@@ -24,16 +25,17 @@ const toggleClient = (clientId: number) => {
   }
 }
 
-const toggleProject = (projectId: string) => {
-  if (expandedProjects.value.has(projectId)) {
-    expandedProjects.value.delete(projectId)
+const toggleProject = (projectId: number) => {
+  if (expandedProjects.value.has(String(projectId))) {
+    expandedProjects.value.delete(String(projectId))
   } else {
-    expandedProjects.value.add(projectId)
+    expandedProjects.value.add(String(projectId))
+    emit('projectClick', projectId)
   }
 }
 
 const isClientExpanded = (clientId: number) => expandedClients.value.has(clientId)
-const isProjectExpanded = (projectId: string) => expandedProjects.value.has(projectId)
+const isProjectExpanded = (projectId: number) => expandedProjects.value.has(String(projectId))
 </script>
 
 <template>
@@ -74,17 +76,17 @@ const isProjectExpanded = (projectId: string) => expandedProjects.value.has(proj
         <div v-for="project in client.projects" :key="project.id" class="tree-item">
           <div
             class="tree-item-content clickable level-1"
-            @click="toggleProject(`${client.id}-${project.id}`)"
+            @click="toggleProject(project.id)"
           >
             <span class="tree-item-toggle">
-              {{ isProjectExpanded(`${client.id}-${project.id}`) ? '▼' : '▶' }}
+              {{ isProjectExpanded(project.id) ? '▼' : '▶' }}
             </span>
             <span class="tree-item-icon">📁</span>
             <span class="tree-item-title">{{ project.name }}</span>
           </div>
 
           <!-- Project Details -->
-          <div v-if="isProjectExpanded(`${client.id}-${project.id}`)" class="tree-item-children">
+          <div v-if="isProjectExpanded(project.id)" class="tree-item-children">
             <div class="tree-item-content data-item level-2">
               <span class="tree-item-toggle-placeholder" />
               <span class="tree-item-title"><strong>Status:</strong> <span :class="`status-badge status-${project.status}`">{{ project.status }}</span></span>
@@ -96,6 +98,25 @@ const isProjectExpanded = (projectId: string) => expandedProjects.value.has(proj
             <div class="tree-item-content data-item level-2">
               <span class="tree-item-toggle-placeholder" />
               <span class="tree-item-title"><strong>Updated:</strong> {{ project.updatedAt }}</span>
+            </div>
+
+            <!-- Tasks -->
+            <div v-for="task in project.tasks" :key="task.id" class="tree-item">
+              <div class="tree-item-content clickable level-2">
+                <span class="tree-item-toggle-placeholder" />
+                <span class="tree-item-icon">✓</span>
+                <span class="tree-item-title">{{ task.name }}</span>
+              </div>
+              <div class="tree-item-children">
+                <div class="tree-item-content data-item level-3">
+                  <span class="tree-item-toggle-placeholder" />
+                  <span class="tree-item-title pl-16"><strong>Status:</strong> <span :class="`status-badge status-${task.status}`">{{ task.status }}</span></span>
+                </div>
+                <div class="tree-item-content data-item level-3">
+                  <span class="tree-item-toggle-placeholder" />
+                  <span class="tree-item-title pl-16"><strong>Created:</strong> {{ task.createdAt }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -196,6 +217,10 @@ const isProjectExpanded = (projectId: string) => expandedProjects.value.has(proj
 
 .level-2 {
   padding-left: 40px;
+}
+
+.level-3 {
+  padding-left: 60px;
 }
 
 .status-badge {
