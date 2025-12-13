@@ -10,7 +10,10 @@ const {
   fetchTasks,
   hasMoreClients,
   hasMoreProjects,
-  hasMoreTasks
+  hasMoreTasks,
+  loadingClients,
+  loadingProjects,
+  loadingTasks
 } = useClients()
 
 onMounted(() => {
@@ -45,6 +48,9 @@ const handleLoadMoreTasks = async (projectId: number) => {
       :has-more-clients="hasMoreClients"
       :has-more-projects="hasMoreProjects"
       :has-more-tasks="hasMoreTasks"
+      :loading-clients="loadingClients"
+      :loading-projects="loadingProjects"
+      :loading-tasks="loadingTasks"
       @client-click="handleClientClick"
       @project-click="handleProjectClick"
       @load-more-clients="handleLoadMoreClients"

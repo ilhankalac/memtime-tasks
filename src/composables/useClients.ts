@@ -9,17 +9,21 @@ export function useClients() {
   const clients = reactive<Client[]>([])
   const clientsOffset = ref(0)
   const hasMoreClients = ref(true)
+  const loadingClients = ref(false)
 
   const projectsOffsets = reactive<Record<number, number>>({})
   const hasMoreProjects = reactive<Record<number, boolean>>({})
+  const loadingProjects = reactive<Record<number, boolean>>({})
 
   const tasksOffsets = reactive<Record<number, number>>({})
   const hasMoreTasks = reactive<Record<number, boolean>>({})
+  const loadingTasks = reactive<Record<number, boolean>>({})
 
   const { showError } = useNotification()
 
   async function fetchClients(sortBy?: string, order: 'asc' | 'desc' = 'asc') {
     try {
+      loadingClients.value = true
       const params: any = {
         limit: ITEMS_PER_PAGE,
         offset: clientsOffset.value
@@ -42,11 +46,14 @@ export function useClients() {
         showError('Failed to fetch clients')
       }
       throw error
+    } finally {
+      loadingClients.value = false
     }
   }
 
   async function fetchProjects(clientId: number, sortBy?: string, order: 'asc' | 'desc' = 'asc'): Promise<void> {
     try {
+      loadingProjects[clientId] = true
       const client = clients.find(c => c.id === clientId)
       if (!client) return
 
@@ -80,11 +87,14 @@ export function useClients() {
         showError('Failed to fetch projects')
       }
       throw error
+    } finally {
+      loadingProjects[clientId] = false
     }
   }
 
   async function fetchTasks(projectId: number, sortBy?: string, order: 'asc' | 'desc' = 'asc'): Promise<void> {
     try {
+      loadingTasks[projectId] = true
       const project = clients
         .flatMap(c => c.projects || [])
         .find(p => p.id === projectId)
@@ -120,6 +130,8 @@ export function useClients() {
         showError('Failed to fetch tasks')
       }
       throw error
+    } finally {
+      loadingTasks[projectId] = false
     }
   }
 
@@ -131,5 +143,8 @@ export function useClients() {
     hasMoreClients,
     hasMoreProjects,
     hasMoreTasks,
+    loadingClients,
+    loadingProjects,
+    loadingTasks,
   }
 }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { VProgressLinear } from 'vuetify/components'
 import type { Client } from '@/types/entities'
 import { formatDate } from '@/utils/dateFormat'
 
@@ -8,6 +9,9 @@ interface Props {
   hasMoreClients?: boolean
   hasMoreProjects?: Record<number, boolean>
   hasMoreTasks?: Record<number, boolean>
+  loadingClients?: boolean
+  loadingProjects?: Record<number, boolean>
+  loadingTasks?: Record<number, boolean>
 }
 
 const props = defineProps<Props>()
@@ -47,6 +51,14 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
 
 <template>
   <div class="client-tree">
+    <!-- Global loading bar for clients -->
+    <v-progress-linear
+      v-if="loadingClients"
+      indeterminate
+      color="primary"
+      class="loading-bar"
+    />
+
     <div v-for="client in clients" :key="client.id" class="tree-item">
       <!-- Client -->
       <div
@@ -84,6 +96,14 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
           <span class="tree-item-title"><strong>Updated:</strong> {{ formatDate(client.updatedAt) }}</span>
         </div>
 
+        <!-- Projects loading indicator -->
+        <v-progress-linear
+          v-if="loadingProjects?.[client.id]"
+          indeterminate
+          color="info"
+          class="loading-bar-nested"
+        />
+
         <!-- Projects -->
         <div v-for="project in client.projects" :key="project.id" class="tree-item">
           <div
@@ -118,6 +138,14 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
                 <strong>Updated:</strong> {{ formatDate(project.updatedAt) }}
               </span>
             </div>
+
+            <!-- Tasks loading indicator -->
+            <v-progress-linear
+              v-if="loadingTasks?.[project.id]"
+              indeterminate
+              color="success"
+              class="loading-bar-nested"
+            />
 
             <!-- Tasks -->
             <div v-for="task in project.tasks" :key="task.id" class="tree-item">
@@ -176,6 +204,20 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
   border-radius: 8px;
   border: 1px solid #e0e0e0;
   padding: 8px;
+}
+
+.loading-bar {
+  margin: 8px 0;
+  border-radius: 4px;
+  width: calc(100% - 16px);
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.loading-bar-nested {
+  margin: 8px 0 8px 20px;
+  border-radius: 4px;
+  width: calc(100% - 36px);
 }
 
 .tree-item {
