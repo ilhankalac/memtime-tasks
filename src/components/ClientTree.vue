@@ -69,8 +69,10 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
         class="tree-item"
         @click="toggleClient(client.id)"
       >
-        <span class="toggle">{{ isClientExpanded(client.id) ? '▼' : '▶' }}</span>
-        <span class="text-h6 mr-2">📁</span>
+        <v-icon class="toggle" size="20">
+          {{ isClientExpanded(client.id) ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+        </v-icon>
+        <v-icon class="mr-2" color="primary" size="20">mdi-briefcase</v-icon>
         <span class="flex-1-1 font-weight-medium text-truncate">{{ client.name }}</span>
       </div>
 
@@ -117,8 +119,10 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
             class="tree-item pl-5"
             @click="toggleProject(project.id)"
           >
-            <span class="toggle">{{ isProjectExpanded(project.id) ? '▼' : '▶' }}</span>
-            <span class="text-h6 mr-2">📁</span>
+            <v-icon class="toggle" size="20">
+              {{ isProjectExpanded(project.id) ? 'mdi-chevron-down' : 'mdi-chevron-right' }}
+            </v-icon>
+            <v-icon class="mr-2" color="info" size="20">mdi-folder-outline</v-icon>
             <span class="flex-1-1 font-weight-medium text-truncate">{{ project.name }}</span>
           </div>
 
@@ -159,7 +163,7 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
             >
               <div class="tree-item pl-10" style="cursor: default;">
                 <span style="width: 20px; margin-right: 8px;" />
-                <span class="text-h6 mr-2">✓</span>
+                <v-icon class="mr-2" color="success" size="18">mdi-checkbox-marked-circle-outline</v-icon>
                 <span class="flex-1-1 font-weight-medium text-truncate text-decoration-underline">
                   {{ task.name }}
                 </span>
@@ -212,27 +216,21 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
 .tree-item {
   display: flex;
   align-items: center;
-  padding: 10px 12px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-in-out;
 }
 
 .tree-item:hover {
-  background-color: #f5f5f5;
-  transform: translateX(2px);
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .toggle {
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   margin-right: 8px;
-  font-size: 10px;
-  color: #757575;
+  color: #616161;
   flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
 .load-btn {
