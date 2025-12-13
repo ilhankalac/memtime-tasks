@@ -50,59 +50,52 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
 </script>
 
 <template>
-  <div class="client-tree">
+  <div class="bg-white rounded-lg pa-2" style="border: 1px solid #e0e0e0; user-select: none;">
     <!-- Global loading bar for clients -->
     <v-progress-linear
       v-if="loadingClients"
       indeterminate
       color="primary"
-      class="loading-bar"
+      class="my-2 mx-2 rounded"
     />
 
     <div
       v-for="client in clients"
       :key="client.id"
-      class="tree-item"
+      class="my-1"
     >
       <!-- Client -->
       <div
-        class="tree-item-content clickable"
+        class="tree-item"
         @click="toggleClient(client.id)"
       >
-        <span class="tree-item-toggle">
-          {{ isClientExpanded(client.id) ? '▼' : '▶' }}
-        </span>
-        <span class="tree-item-icon">📁</span>
-        <span class="tree-item-title">{{ client.name }}</span>
+        <span class="toggle">{{ isClientExpanded(client.id) ? '▼' : '▶' }}</span>
+        <span class="text-h6 mr-2">📁</span>
+        <span class="flex-1-1 font-weight-medium text-truncate">{{ client.name }}</span>
       </div>
 
       <!-- Client Details -->
-      <div
-        v-if="isClientExpanded(client.id)"
-        class="tree-item-children"
-      >
-        <div class="tree-item-content data-item level-1">
-          <span class="tree-item-toggle-placeholder" />
-          <span class="tree-item-title">
-            <strong>Description:</strong> {{ client.description }}
-          </span>
+      <div v-if="isClientExpanded(client.id)">
+        <div class="d-flex align-center pa-2 pl-5 text-grey-darken-1 text-body-2">
+          <span style="width: 20px; margin-right: 8px;" />
+          <span class="flex-1-1"><strong>Description:</strong> {{ client.description }}</span>
         </div>
-        <div class="tree-item-content data-item level-1">
-          <span class="tree-item-toggle-placeholder" />
-          <span class="tree-item-title">
+        <div class="d-flex align-center pa-2 pl-5 text-grey-darken-1 text-body-2">
+          <span style="width: 20px; margin-right: 8px;" />
+          <span class="flex-1-1">
             <strong>Status:</strong>
-            <span :class="`status-badge status-${client.status}`">
+            <v-chip :color="client.status === 'completed' ? 'success' : client.status === 'in-progress' ? 'primary' : 'warning'" size="small" class="ml-2">
               {{ client.status }}
-            </span>
+            </v-chip>
           </span>
         </div>
-        <div class="tree-item-content data-item level-1">
-          <span class="tree-item-toggle-placeholder" />
-          <span class="tree-item-title"><strong>Created:</strong> {{ formatDate(client.createdAt) }}</span>
+        <div class="d-flex align-center pa-2 pl-5 text-grey-darken-1 text-body-2">
+          <span style="width: 20px; margin-right: 8px;" />
+          <span class="flex-1-1"><strong>Created:</strong> {{ formatDate(client.createdAt) }}</span>
         </div>
-        <div class="tree-item-content data-item level-1">
-          <span class="tree-item-toggle-placeholder" />
-          <span class="tree-item-title"><strong>Updated:</strong> {{ formatDate(client.updatedAt) }}</span>
+        <div class="d-flex align-center pa-2 pl-5 text-grey-darken-1 text-body-2">
+          <span style="width: 20px; margin-right: 8px;" />
+          <span class="flex-1-1"><strong>Updated:</strong> {{ formatDate(client.updatedAt) }}</span>
         </div>
 
         <!-- Projects loading indicator -->
@@ -110,51 +103,43 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
           v-if="loadingProjects?.[client.id]"
           indeterminate
           color="info"
-          class="loading-bar-nested"
+          class="my-2 ml-5 rounded"
+          style="width: calc(100% - 36px);"
         />
 
         <!-- Projects -->
         <div
           v-for="project in client.projects"
           :key="project.id"
-          class="tree-item"
+          class="my-1"
         >
           <div
-            class="tree-item-content clickable level-1"
+            class="tree-item pl-5"
             @click="toggleProject(project.id)"
           >
-            <span class="tree-item-toggle">
-              {{ isProjectExpanded(project.id) ? '▼' : '▶' }}
-            </span>
-            <span class="tree-item-icon">📁</span>
-            <span class="tree-item-title">{{ project.name }}</span>
+            <span class="toggle">{{ isProjectExpanded(project.id) ? '▼' : '▶' }}</span>
+            <span class="text-h6 mr-2">📁</span>
+            <span class="flex-1-1 font-weight-medium text-truncate">{{ project.name }}</span>
           </div>
 
           <!-- Project Details -->
-          <div
-            v-if="isProjectExpanded(project.id)"
-            class="tree-item-children"
-          >
-            <div class="tree-item-content data-item level-2">
-              <span class="tree-item-toggle-placeholder" />
-              <span class="tree-item-title">
-                <strong>Status:</strong> 
-                <span :class="`status-badge status-${project.status}`">
+          <div v-if="isProjectExpanded(project.id)">
+            <div class="d-flex align-center pa-2 pl-10 text-grey-darken-1 text-body-2">
+              <span style="width: 20px; margin-right: 8px;" />
+              <span class="flex-1-1">
+                <strong>Status:</strong>
+                <v-chip :color="project.status === 'completed' ? 'success' : project.status === 'in-progress' ? 'primary' : 'warning'" size="small" class="ml-2">
                   {{ project.status }}
-                </span>
+                </v-chip>
               </span>
             </div>
-            <div class="tree-item-content data-item level-2">
-              <span class="tree-item-toggle-placeholder" />
-              <span class="tree-item-title">
-                <strong>Created:</strong> {{ formatDate(project.createdAt) }}
-              </span>
+            <div class="d-flex align-center pa-2 pl-10 text-grey-darken-1 text-body-2">
+              <span style="width: 20px; margin-right: 8px;" />
+              <span class="flex-1-1"><strong>Created:</strong> {{ formatDate(project.createdAt) }}</span>
             </div>
-            <div class="tree-item-content data-item level-2">
-              <span class="tree-item-toggle-placeholder" />
-              <span class="tree-item-title">
-                <strong>Updated:</strong> {{ formatDate(project.updatedAt) }}
-              </span>
+            <div class="d-flex align-center pa-2 pl-10 text-grey-darken-1 text-body-2">
+              <span style="width: 20px; margin-right: 8px;" />
+              <span class="flex-1-1"><strong>Updated:</strong> {{ formatDate(project.updatedAt) }}</span>
             </div>
 
             <!-- Tasks loading indicator -->
@@ -162,51 +147,43 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
               v-if="loadingTasks?.[project.id]"
               indeterminate
               color="success"
-              class="loading-bar-nested"
+              class="my-2 ml-5 rounded"
+              style="width: calc(100% - 36px);"
             />
 
             <!-- Tasks -->
             <div
               v-for="task in project.tasks"
               :key="task.id"
-              class="tree-item"
+              class="my-1"
             >
-              <div class="tree-item-content clickable level-2">
-                <span class="tree-item-toggle-placeholder" />
-                <span class="tree-item-icon">✓</span>
-                <span
-                  class="tree-item-title"
-                  style="text-decoration: underline;"
-                >
+              <div class="tree-item pl-10" style="cursor: default;">
+                <span style="width: 20px; margin-right: 8px;" />
+                <span class="text-h6 mr-2">✓</span>
+                <span class="flex-1-1 font-weight-medium text-truncate text-decoration-underline">
                   {{ task.name }}
                 </span>
               </div>
-              <div class="tree-item-children">
-                <div class="tree-item-content data-item level-3">
-                  <span class="tree-item-toggle-placeholder" />
-                  <span class="tree-item-title pl-7">
-                    <strong>Status:</strong> 
-                    <span :class="`status-badge status-${task.status}`">
+              <div>
+                <div class="d-flex align-center pa-2 text-grey-darken-1 text-body-2" style="padding-left: 60px;">
+                  <span style="width: 20px; margin-right: 8px;" />
+                  <span class="flex-1-1 pl-14">
+                    <strong>Status:</strong>
+                    <v-chip :color="task.status === 'completed' ? 'success' : task.status === 'in-progress' ? 'primary' : 'warning'" size="small" class="ml-2">
                       {{ task.status }}
-                    </span>
+                    </v-chip>
                   </span>
                 </div>
-                <div class="tree-item-content data-item level-3">
-                  <span class="tree-item-toggle-placeholder" />
-                  <span class="tree-item-title pl-7"><strong>Created:</strong> {{ formatDate(task.createdAt) }}</span>
+                <div class="d-flex align-center pa-2 text-grey-darken-1 text-body-2" style="padding-left: 60px;">
+                  <span style="width: 20px; margin-right: 8px;" />
+                  <span class="flex-1-1 pl-14"><strong>Created:</strong> {{ formatDate(task.createdAt) }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Load More Tasks Button -->
-            <div
-              v-if="hasMoreTasks?.[project.id]"
-              class="load-more-container level-2"
-            >
-              <button
-                class="load-more-button small"
-                @click="emit('loadMoreTasks', project.id)"
-              >
+            <div v-if="hasMoreTasks?.[project.id]" class="my-3 pa-2 pl-10">
+              <button class="load-btn" @click="emit('loadMoreTasks', project.id)">
                 Load More Tasks
               </button>
             </div>
@@ -214,14 +191,8 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
         </div>
 
         <!-- Load More Projects Button -->
-        <div
-          v-if="hasMoreProjects?.[client.id]"
-          class="load-more-container level-1"
-        >
-          <button
-            class="load-more-button small"
-            @click="emit('loadMoreProjects', client.id)"
-          >
+        <div v-if="hasMoreProjects?.[client.id]" class="my-3 pa-2 pl-5">
+          <button class="load-btn" @click="emit('loadMoreProjects', client.id)">
             Load More Projects
           </button>
         </div>
@@ -229,14 +200,8 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
     </div>
 
     <!-- Load More Clients Button -->
-    <div
-      v-if="hasMoreClients"
-      class="load-more-container"
-    >
-      <button
-        class="load-more-button"
-        @click="emit('loadMoreClients')"
-      >
+    <div v-if="hasMoreClients" class="my-3 pa-2">
+      <button class="load-btn" @click="emit('loadMoreClients')">
         Load More Clients
       </button>
     </div>
@@ -244,58 +209,21 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
 </template>
 
 <style scoped>
-.client-tree {
-  font-size: 14px;
-  user-select: none;
-  background: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  padding: 8px;
-}
-
-.loading-bar {
-  margin: 8px 0;
-  border-radius: 4px;
-  width: calc(100% - 16px);
-  margin-left: 8px;
-  margin-right: 8px;
-}
-
-.loading-bar-nested {
-  margin: 8px 0 8px 20px;
-  border-radius: 4px;
-  width: calc(100% - 36px);
-}
-
 .tree-item {
-  margin: 2px 0;
-}
-
-.tree-item-content {
   display: flex;
   align-items: center;
   padding: 10px 12px;
-  transition: all 0.2s ease;
   border-radius: 6px;
-}
-
-.tree-item-content.clickable {
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.tree-item-content.clickable:hover {
+.tree-item:hover {
   background-color: #f5f5f5;
   transform: translateX(2px);
 }
 
-.tree-item-content.data-item {
-  cursor: default;
-  padding: 8px 12px;
-  color: #616161;
-  font-size: 13px;
-}
-
-.tree-item-toggle {
+.toggle {
   width: 20px;
   height: 20px;
   display: inline-flex;
@@ -305,85 +233,9 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
   font-size: 10px;
   color: #757575;
   flex-shrink: 0;
-  transition: transform 0.2s ease;
 }
 
-.tree-item-content.clickable:hover .tree-item-toggle {
-  color: #424242;
-}
-
-.tree-item-toggle-placeholder {
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-
-.tree-item-icon {
-  margin-right: 10px;
-  font-size: 18px;
-  flex-shrink: 0;
-  filter: grayscale(0.2);
-}
-
-.tree-item-title {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 500;
-}
-
-.tree-item-content.data-item .tree-item-title {
-  font-weight: 400;
-}
-
-.tree-item-children {
-  margin: 4px 0;
-}
-
-.level-1 {
-  padding-left: 20px;
-}
-
-.level-2 {
-  padding-left: 40px;
-}
-
-.level-3 {
-  padding-left: 60px;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.status-in-progress {
-  background-color: #e3f2fd;
-  color: #1976d2;
-}
-
-.status-pending {
-  background-color: #fff3e0;
-  color: #f57c00;
-}
-
-.status-completed {
-  background-color: #e8f5e9;
-  color: #388e3c;
-}
-
-.load-more-container {
-  margin: 12px 0;
-  padding: 8px 12px;
-}
-
-.load-more-button {
+.load-btn {
   width: 100%;
   padding: 10px 16px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -397,18 +249,13 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
-.load-more-button:hover {
+.load-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-.load-more-button:active {
+.load-btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
-}
-
-.load-more-button.small {
-  padding: 8px 14px;
-  font-size: 13px;
 }
 </style>

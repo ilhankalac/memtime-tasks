@@ -1,4 +1,4 @@
-type EntityStatus = "active";
+type EntityStatus = "active" | "pending" | "completed" | "in-progress";
 
 interface BaseEntity {
   id: number;
