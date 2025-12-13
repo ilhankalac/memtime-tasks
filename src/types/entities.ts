@@ -1,9 +1,9 @@
-type ClientStatus = "in-progress" | "pending" | "completed";
+type EntityStatus = "active";
 
 interface BaseEntity {
   id: number;
   name: string;
-  status: ClientStatus;
+  status: EntityStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -19,7 +19,7 @@ export interface Project extends BaseEntity {
 }
 
 export interface Task extends BaseEntity {
-  projectId: number;
+  parent: number;
 }
 
 export interface TimeEntry {

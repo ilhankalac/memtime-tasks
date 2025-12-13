@@ -15,18 +15,25 @@ export function useClients() {
   const tasksOffsets = reactive<Record<number, number>>({})
   const hasMoreTasks = reactive<Record<number, boolean>>({})
 
-  async function fetchClients() {
-    const data = await api.get<Client[]>('/clients', {
+  async function fetchClients(sortBy?: string, order: 'asc' | 'desc' = 'asc') {
+    const params: any = {
       limit: ITEMS_PER_PAGE,
       offset: clientsOffset.value
-    })
+    }
+
+    if (sortBy) {
+      params.sortBy = sortBy
+      params.order = order
+    }
+
+    const data = await api.get<Client[]>('/clients', params)
 
     clients.push(...data)
     clientsOffset.value += data.length
     hasMoreClients.value = data.length === ITEMS_PER_PAGE
   }
 
-  async function fetchProjects(clientId: number): Promise<void> {
+  async function fetchProjects(clientId: number, sortBy?: string, order: 'asc' | 'desc' = 'asc'): Promise<void> {
     const client = clients.find(c => c.id === clientId)
     if (!client) return
 
@@ -38,17 +45,24 @@ export function useClients() {
 
     if (hasMoreProjects[clientId] === false) return
 
-    const data = await api.get<Project[]>(`/clients/${clientId}/projects`, {
+    const params: any = {
       limit: ITEMS_PER_PAGE,
       offset: projectsOffsets[clientId] || 0
-    })
+    }
+
+    if (sortBy) {
+      params.sortBy = sortBy
+      params.order = order
+    }
+
+    const data = await api.get<Project[]>(`/clients/${clientId}/projects`, params)
 
     client.projects!.push(...data)
     projectsOffsets[clientId] = (projectsOffsets[clientId] || 0) + data.length
     hasMoreProjects[clientId] = data.length === ITEMS_PER_PAGE
   }
 
-  async function fetchTasks(projectId: number): Promise<void> {
+  async function fetchTasks(projectId: number, sortBy?: string, order: 'asc' | 'desc' = 'asc'): Promise<void> {
     const project = clients
       .flatMap(c => c.projects || [])
       .find(p => p.id === projectId)
@@ -62,10 +76,17 @@ export function useClients() {
 
     if (hasMoreTasks[projectId] === false) return
 
-    const data = await api.get<Task[]>(`/projects/${projectId}/tasks`, {
+    const params: any = {
       limit: ITEMS_PER_PAGE,
       offset: tasksOffsets[projectId] || 0
-    })
+    }
+
+    if (sortBy) {
+      params.sortBy = sortBy
+      params.order = order
+    }
+
+    const data = await api.get<Task[]>(`/projects/${projectId}/tasks`, params)
 
     project.tasks!.push(...data)
     tasksOffsets[projectId] = (tasksOffsets[projectId] || 0) + data.length
