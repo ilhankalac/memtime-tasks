@@ -22,25 +22,12 @@ const headers = [
 const dialogOpen = ref(false)
 const selectedEntry = ref<TimeEntry | null>(null)
 const loading = ref(false)
-const snackbar = ref(false)
-const snackbarMessage = ref('')
-const snackbarColor = ref('info')
 
 onMounted(() => {
   loadData()
 })
 
 const loadData = async () => {
-  loading.value = true
-  try {
-    await fetchTimeEntries()
-  } catch (error) {
-  } finally {
-    loading.value = false
-  }
-}
-
-const handleLoadMore = async () => {
   loading.value = true
   try {
     await fetchTimeEntries()
@@ -134,14 +121,6 @@ async function handleDelete(entry: TimeEntry) {
       :time-entry="selectedEntry"
       @submit="handleFormSubmit"
     />
-
-    <v-snackbar
-      v-model="snackbar"
-      :color="snackbarColor"
-      :timeout="3000"
-    >
-      {{ snackbarMessage }}
-    </v-snackbar>
   </div>
 </template>
 
