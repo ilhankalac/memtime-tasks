@@ -116,7 +116,7 @@ async function handleDelete(entry: TimeEntry) {
       </v-data-table>
     </v-card>
 
-    <TimeEntryForm
+    <time-entry-form
       v-model="dialogOpen"
       :time-entry="selectedEntry"
       @submit="handleFormSubmit"
