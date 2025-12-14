@@ -45,13 +45,23 @@ const snackbarColor = computed(() => {
             <h1 class="app-title">Time Management System</h1>
             <p class="app-subtitle">Technical implementation for the assignment</p>
             <p class="task-link">
-              Task specification:
+              <strong>Task specification:</strong>
               <a
                 href="https://lustrous-beijinho-54fcf1.netlify.app/task.html"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 https://lustrous-beijinho-54fcf1.netlify.app/task.html
+              </a>
+            </p>
+            <p class="task-link">
+              <strong>GitHub repository:</strong>
+              <a
+                href="https://github.com/ilhankalac/memtime-tasks"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://github.com/ilhankalac/memtime-tasks
               </a>
             </p>
           </div>

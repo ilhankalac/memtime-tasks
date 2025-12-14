@@ -59,6 +59,12 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
       class="my-2 mx-2 rounded"
     />
 
+    <!-- No data message -->
+    <div v-if="!loadingClients && clients.length === 0" class="no-data-message">
+      <v-icon size="64" color="grey-lighten-1">mdi-briefcase-outline</v-icon>
+      <p class="text-h6 text-grey-darken-1 mt-4">No data available</p>
+    </div>
+
     <div
       v-for="client in clients"
       :key="client.id"
@@ -204,7 +210,7 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
     </div>
 
     <!-- Load More Clients Button -->
-    <div v-if="hasMoreClients" class="my-3 pa-2">
+    <div v-if="hasMoreClients && clients.length > 0" class="my-3 pa-2">
       <button class="load-btn" @click="emit('loadMoreClients')">
         Load More Clients
       </button>
@@ -213,6 +219,15 @@ const isProjectExpanded = (projectId: number) => expandedProjects.value.has(Stri
 </template>
 
 <style scoped>
+.no-data-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
 .tree-item {
   display: flex;
   align-items: center;
